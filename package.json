@@ -19,6 +19,7 @@
     "firebase": "^10.4.0",
     "google-auth-library": "^9.1.0",
     "googleapis": "^126.0.1",
+    "js-cookie": "^3.0.5",
     "next": "^14.0.4",
     "react": "latest",
     "react-datepicker": "^4.25.0",

@@ -13,6 +13,24 @@ export default function Login() {
     const router = useRouter()
     const googleProvider = new GoogleAuthProvider()
 
+    const googleAuthUrl = "https://accounts.google.com/o/oauth2/auth"
+    const clientId = "605098004143-qhd7j3t7fb1p72sllu320fgg9b21f6bj.apps.googleusercontent.com"
+    const redirectUri = "http://localhost:3000"
+    const scope = "https://www.googleapis.com/auth/calendar.events%20https://www.googleapis.com/auth/userinfo.profile"
+
+    const handleGoogleSignIn = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const credential = GoogleAuthProvider.credentialFromResult(result);
+            const accessToken = credential.accessToken;
+            const calendarAuthUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=token`;
+            window.location.href = calendarAuthUrl
+        } catch (error) {
+            console.error("Google login error:", error);
+        }    
+    }
+
+/*
     const handleGoogleSignIn = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider)
@@ -30,7 +48,7 @@ export default function Login() {
           } catch (error) {
                 console.error("Google login error:", error);
           }    
-    }
+    }*/
     return (
         <>
             <Head>

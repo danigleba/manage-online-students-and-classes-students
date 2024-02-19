@@ -13,7 +13,7 @@ export default function NextClasses({ user }) {
   const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "sebtiembre", "octubre", "noviembre", "diciembre"]
   const [slide, setSlide] = useState(0)
   const [nSlide, setNSlide] = useState(3)
-
+  const [student, setStudent] = useState()
   const handleNextSlide = () => {
     setSlide(prevSlide => Math.min(prevSlide + 1, classes.length - nSlide))
   }
