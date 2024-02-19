@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { useState, useEffect } from 'react'
 import {onAuthStateChanged} from "firebase/auth"
 import {auth} from '@/utils/firebase'
@@ -28,7 +27,6 @@ export default function Home() {
       <div className='my-16'></div>
       <Files user={user} />
       <BottomNavBar page={"index"} />
-      <Footer />
     </main>
   )
 }

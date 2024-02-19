@@ -8,56 +8,69 @@ import { TiDelete } from 'react-icons/ti'
 import AddClassButton from './AddClassesButton'
 import ClassCard from './ClassCard'
 
-export default function NextClasses(props) {
-    const [classes, setClasses] = useState([])
-    const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "sebtiembre", "octubre", "noviembre", "diciembre"]
-    const [slide, setSlide] = useState(0)
-    const [nSlide, setNSlide] = useState(3)
-
-    useEffect(() => {
-        //Function to make the carrusel responsive
-        const updateNSlide = () => {
-          const screenWidth = window.innerWidth
-          if (screenWidth <= 767) { 
-            setNSlide(1)
-          } else if (screenWidth <= 1023) { 
-            setNSlide(2)
-          } else if (screenWidth > 1023) { 
-            setNSlide(3)
-          }
-        }
-    
-        updateNSlide();
-        window.addEventListener("resize", updateNSlide)
-    
-        return () => {
-          window.removeEventListener("resize", updateNSlide)
-        }
-      }, [])
-
-  useEffect(() => {
-    fetch("/api/classes/get_classes_today?student_email=" + props?.user?.email)
-      .then(response => response.json())
-      .then(data => setClasses(data.data))
-  }, [props?.user]);
+export default function NextClasses({ user }) {
+  const [classes, setClasses] = useState([])
+  const months = ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "sebtiembre", "octubre", "noviembre", "diciembre"]
+  const [slide, setSlide] = useState(0)
+  const [nSlide, setNSlide] = useState(3)
 
   const handleNextSlide = () => {
     setSlide(prevSlide => Math.min(prevSlide + 1, classes.length - nSlide))
   }
-
+  
   const handlePrevSlide = () => {
     setSlide(prevSlide => Math.max(prevSlide - 1, 0))
   }
-
   const visibleClasses = classes.slice(slide, slide + nSlide)
 
+  const getTodaysClasses = async () => {
+    try {
+      const response = await fetch(`/api/classes/get_classes_today?student_email=${user?.email}`, {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ user }), 
+      })
+      const data = await response.json()
+      setStudent(data.data)
+    } 
+    catch (error) {
+      console.error("Error fetching comments:", error.message)
+    } 
+  }
+
+  useEffect(() => {
+    if (user) getTodaysClasses()
+  }, [user])
+
+  useEffect(() => {
+    //Function to make the carrusel responsive
+    const updateNSlide = () => {
+      const screenWidth = window.innerWidth
+      if (screenWidth <= 767) { 
+        setNSlide(1)
+      } else if (screenWidth <= 1023) { 
+        setNSlide(2)
+      } else if (screenWidth > 1023) { 
+        setNSlide(3)
+      }
+    }
+
+    updateNSlide();
+    window.addEventListener("resize", updateNSlide)
+
+    return () => {
+      window.removeEventListener("resize", updateNSlide)
+    }
+  }, [])
   return (
-    <main className="pt-8 md:mx-6 mx-4">
-      <div className='mb-6  flex items-center gap-4'>
+    <main className="md:mx-10 mx-6">
+      <div className='mb-6 flex justify-between md:justify-start items-center gap-4'>
         <div className='flex items-center'>
           <h2 className=''>Clases del día</h2>
         </div>
-          <AddClassButton />
+        <AddClassButton />
       </div>
       <div className="flex items-center w-full">
       {classes?.length > 0 ? (

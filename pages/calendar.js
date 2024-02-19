@@ -1,6 +1,5 @@
 import { Inter } from 'next/font/google'
 import Header from '@/components/Header'
-import Footer from '@/components/Footer'
 import { useState, useEffect } from 'react'
 import {onAuthStateChanged} from "firebase/auth"
 import {auth} from '@/utils/firebase'
@@ -24,7 +23,6 @@ export default function Home() {
       <Header user={user} />
       <Calendar user={user}/>
       <BottomNavBar page={"calendar"}/>
-      <Footer />
     </main>
   )
 }
